@@ -1,6 +1,6 @@
 <?php
 // อ่านค่า Config จาก Railway Environment Variables
-$privateUrl = getenv('MYSQL_PRIVATE_URL');
+$privateUrl = getenv('MYSQL_PRIVATE_URL') ?: getenv('MYSQL_URL');
 
 if ($privateUrl) {
     $databaseUrl = parse_url($privateUrl);
@@ -13,13 +13,13 @@ if ($privateUrl) {
     $host = $databaseUrl['host'];
     $user = rawurldecode($databaseUrl['user'] ?? '');
     $pass = rawurldecode($databaseUrl['pass'] ?? '');
-    $db   = rawurldecode(ltrim($databaseUrl['path'], '/'));
+    $db   = getenv('MYSQLDATABASE') ?: getenv('MYSQL_DATABASE') ?: rawurldecode(ltrim($databaseUrl['path'], '/'));
     $port = $databaseUrl['port'] ?? 3306;
 } else {
     $host = getenv('MYSQLHOST') ?: 'localhost';
     $user = getenv('MYSQLUSER') ?: 'root';
     $pass = getenv('MYSQLPASSWORD') ?: '';
-    $db   = getenv('MYSQLDATABASE') ?: 'railway';
+    $db   = getenv('MYSQLDATABASE') ?: getenv('MYSQL_DATABASE') ?: 'railway';
     $port = getenv('MYSQLPORT') ?: '3306';
 }
 
