@@ -1,11 +1,27 @@
 <?php
 // อ่านค่า Config จาก Railway Environment Variables
-$host = getenv('MYSQLHOST') ?: 'localhost';
-$user = getenv('MYSQLUSER') ?: 'root';
-$pass = getenv('MYSQLPASSWORD') ?: '';
-// เปลี่ยนบรรทัดนี้ใน config.php
-$db = getenv('MYSQLDATABASE') ?: 'railway';
-$port = getenv('MYSQLPORT') ?: '3306';
+$privateUrl = getenv('MYSQL_PRIVATE_URL');
+
+if ($privateUrl) {
+    $databaseUrl = parse_url($privateUrl);
+    if (!$databaseUrl || ($databaseUrl['scheme'] ?? '') !== 'mysql' || empty($databaseUrl['host']) || empty($databaseUrl['path'])) {
+        http_response_code(500);
+        echo json_encode(["status" => "error", "message" => "รูปแบบ MYSQL_PRIVATE_URL ไม่ถูกต้อง"]);
+        exit;
+    }
+
+    $host = $databaseUrl['host'];
+    $user = rawurldecode($databaseUrl['user'] ?? '');
+    $pass = rawurldecode($databaseUrl['pass'] ?? '');
+    $db   = rawurldecode(ltrim($databaseUrl['path'], '/'));
+    $port = $databaseUrl['port'] ?? 3306;
+} else {
+    $host = getenv('MYSQLHOST') ?: 'localhost';
+    $user = getenv('MYSQLUSER') ?: 'root';
+    $pass = getenv('MYSQLPASSWORD') ?: '';
+    $db   = getenv('MYSQLDATABASE') ?: 'railway';
+    $port = getenv('MYSQLPORT') ?: '3306';
+}
 
 try {
     $dsn = "mysql:host=$host;port=$port;dbname=$db;charset=utf8mb4";
