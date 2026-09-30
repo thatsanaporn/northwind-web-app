@@ -3,7 +3,8 @@
 $host = getenv('MYSQLHOST') ?: 'localhost';
 $user = getenv('MYSQLUSER') ?: 'root';
 $pass = getenv('MYSQLPASSWORD') ?: '';
-$db = getenv('MYSQLDATABASE') ?: 'db_northwind';
+// เปลี่ยนบรรทัดนี้ใน config.php
+$db = getenv('MYSQLDATABASE') ?: 'railway';
 $port = getenv('MYSQLPORT') ?: '3306';
 
 try {
