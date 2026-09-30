@@ -153,7 +153,7 @@
             const price = document.getElementById('p_price').value;
             const stock = document.getElementById('p_stock').value;
 
-            // Validation
+            // Validation Alerts
             if (!name) {
                 Swal.fire('แจ้งเตือน Validation', 'กรุณากรอกชื่อสินค้า', 'warning');
                 return;
