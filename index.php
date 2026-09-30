@@ -122,8 +122,8 @@
         async function loadOptions() {
             try {
                 const response = await fetch('api.php?action=options');
-                if (!response.ok) throw new Error('โหลดตัวเลือกไม่สำเร็จ');
                 const data = await response.json();
+                if (!response.ok) throw new Error(data.message || 'โหลดตัวเลือกไม่สำเร็จ');
                 document.getElementById('p_supplier').innerHTML += data.suppliers.map(item =>
                     `<option value="${item.SupplierID}">${escapeHtml(item.SupplierName)}</option>`
                 ).join('');
@@ -131,7 +131,8 @@
                     `<option value="${item.CategoryID}">${escapeHtml(item.CategoryName)}</option>`
                 ).join('');
             } catch (error) {
-                Swal.fire('โหลดข้อมูลไม่สำเร็จ', 'ไม่สามารถโหลด supplier และ category จากฐานข้อมูลได้', 'error');
+                console.error('Failed to load supplier and category options:', error);
+                Swal.fire('โหลดข้อมูลไม่สำเร็จ', error.message || 'ไม่สามารถโหลด supplier และ category จากฐานข้อมูลได้', 'error');
             }
         }
 
