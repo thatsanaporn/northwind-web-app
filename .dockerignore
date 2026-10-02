@@ -1,0 +1,9 @@
+.git
+.env
+.env.*
+!.env.example
+*.log
+ChatGPT Installer.exe
+Microsoft.Services.Store.winmd
+Procfile.txt
+northwind-crud-assignment-final/
